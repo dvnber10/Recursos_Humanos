@@ -1,0 +1,16 @@
+{
+  "name": "rh",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "npx tailwindcss -i ./RH/wwwroot/css/site.css -o ./RH/wwwroot/css/styles.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+  
+}
