@@ -1,0 +1,15 @@
+@{
+    Layout = "Vista";
+}
+@model RH.Models.Usuario
+<h1>@ViewData["Contratado"]</h1>
+<h2>Subir Curriculum</h2>
+
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    <div class="form-group align-items-center rounded-md">
+        <label asp-for="Curriculum">Selecciona una imagen:</label>
+        <input asp-for="Curriculum" type="file" class="form-control-file" />
+    </div>
+    <button type="submit" class="btn btn-primary">Subir Imagen</button>
+    <label class="alert-danger">@ViewData["datos"]</label>
+</form>

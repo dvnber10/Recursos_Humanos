@@ -1,0 +1,60 @@
+@{
+    Layout = "Vista";
+}
+@model IEnumerable<object>
+<div class="w-full h-full flex justify-center items-center bg-white rounded-md">
+    <canvas id="scatterChart" class="max-w-full max-h-screen"></canvas>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    var ctx = document.getElementById('scatterChart').getContext('2d');
+    var scatterChart = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Estadisticas de Horas trabajadas',
+                data: @Html.Raw(Json.Serialize(Model)),  <!-- Pasamos los datos del modelo -->
+                pointBackgroundColor: 'black',
+                showLine: true,  // Agregar líneas entre los puntos
+                borderColor: 'blue',  // Color de las líneas
+                borderWidth: 2, 
+                backgroundColor: ["#ff0000", "#00ff00", "#0000ff", "#ffff00", "#00ffff"]
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                },
+                y: {
+                    type: 'linear',
+                    position: 'left'
+                }
+            }
+        },
+        label: {
+          fontWeight: "bold",
+          fontSize: 20,
+          fontFamily: "JetBrains Mono"
+        }
+    });
+</script>
+<script>
+    window.addEventListener('resize', ajustarCanvas);
+
+function ajustarCanvas() {
+    var canvas = document.getElementById('miCanvas');
+    var container = document.querySelector('.w-full.h-screen');
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+    
+    // Agrega aquí el código para volver a dibujar contenido en el Canvas, si es necesario.
+}
+
+</script>
