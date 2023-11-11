@@ -91,7 +91,7 @@ namespace RH.Controllers
                                 }if (idR.ToString()=="4")
                                 {
                                     return RedirectToAction("Index","Gerente");
-                                }if (idR.ToString()=="1")
+                                }if (idR.ToString()=="5")
                                 {
                                     return RedirectToAction("Index","Gestor");
                                 }

@@ -32,16 +32,7 @@
                 @Html.DisplayNameFor(model => model.Cargo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Contraseña)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Curriculum)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdRolNavigation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdcontratacionNavigation)
             </th>
             <th></th>
         </tr>
@@ -68,16 +59,7 @@
                 @Html.DisplayFor(modelItem => item.Cargo)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Contraseña)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Curriculum)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdRolNavigation.IdRol)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdcontratacionNavigation.IdContratacion)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.IdUsuario">Edit</a> |

@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using RH.Models;
-using PruebaAPIcorreo.Sevices;
-using PruebaAPIcorreo.Models;
+using RH.Sevices;
 
 namespace RH.Controllers;
 
