@@ -17,7 +17,7 @@ namespace RH.Controllers
     {
         private readonly ILogger<GerenteController> _logger;
         private readonly RecursosHumanosContext _context;
-        public GerenteController(ILogger<GerenteController> logger,RecursosHumanosContext contexto)
+        public GerenteController(ILogger<GerenteController> logger, RecursosHumanosContext contexto)
         {
             _logger = logger;
             _context = contexto;
@@ -68,7 +68,7 @@ namespace RH.Controllers
         [Authorize(Roles = "4")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IdUsuario,Nombre,Correo,Documento,Direccion,Telefono,Cargo,Contraseña,Idcontratacion,IdRol,Curriculum")] Usuario usuario)
+        public async Task<IActionResult> Create([Bind("IdUsuario,Nombre,Correo,Documento,Direccion,Telefono,Cargo,Contraseï¿½a,Idcontratacion,IdRol,Curriculum")] Usuario usuario)
         {
             if (ModelState.IsValid)
             {
@@ -106,41 +106,33 @@ namespace RH.Controllers
         // POST: Usuarios/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Route("/EditarG")]
+         [Route("/EditarGerente")]
         [Authorize(Roles = "4")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,Nombre,Correo,Documento,Direccion,Telefono,Cargo,Contraseña,Idcontratacion,IdRol,Curriculum")] Usuario usuario)
+        public async Task<IActionResult> Editar(int id, Usuario usuario)
         {
-            if (id != usuario.IdUsuario)
+            try
             {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
             {
-                try
+                if (!UsuarioExists(usuario.IdUsuario))
                 {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!UsuarioExists(usuario.IdUsuario))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", usuario.IdRol);
             ViewData["Idcontratacion"] = new SelectList(_context.Contratacions, "IdContratacion", "IdContratacion", usuario.Idcontratacion);
             ViewData["Usuario"] = "Gerente";
-            return View(usuario);
+            return RedirectToAction("Index");
         }
 
         // GET: Usuarios/Delete/5

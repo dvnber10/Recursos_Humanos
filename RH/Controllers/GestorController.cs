@@ -1,13 +1,12 @@
-using System.Security.AccessControl;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Twilio;
+using Twilio.Rest.Api.V2010.Account;
 using RH.Models;
 using RH.Sevices;
-using ZoomNet;
-using ZoomNet.Utilities;
-using ZoomNet.Models;
+
 
 namespace RH.Controllers
 {
@@ -57,23 +56,6 @@ namespace RH.Controllers
             }
             return RedirectToAction("Index", "Gestor");
         }
-        [Route("/LlamadaGestor")]
-        [Authorize(Roles = "5")]
-        public async Task<IActionResult> Call (int? id){
-            var usuario = _context.Usuarios.Where(u => u.IdUsuario == id).FirstOrDefault();
-            string clientId = _config["ZoomApi:ClientId"];
-        string clientSecret = _config["ZoomApi:ClientSecret"];
-        string redirectUri = _config["ZoomApi:RedirectUri"];
-         var options = new ZoomClientOptions
-        {
-            AuthorizationUri = "https://zoom.us/oauth/authorize",
-            TokenUri = "https://zoom.us/oauth/token",
-            ClientId = clientId,
-            ClientSecret = clientSecret,
-            RedirectUri = redirectUri,
-        };
-            return View();
-        }
         [Route("/DetallesGestor")]
         [Authorize(Roles = "5")]
         public async Task<IActionResult> Details(int? id)
@@ -121,37 +103,29 @@ namespace RH.Controllers
         [Authorize(Roles = "5")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IdUsuario,Nombre,Correo,Documento,Direccion,Telefono,Cargo,Contrase�a,Idcontratacion,IdRol,Curriculum")] Usuario usuario)
+        public async Task<IActionResult> Editar(int id, Usuario usuario)
         {
-            if (id != usuario.IdUsuario)
+            try
             {
-                return NotFound();
-            }
 
-            if (ModelState.IsValid)
+                _context.Update(usuario);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
             {
-                try
+                if (!UsuarioExists(usuario.IdUsuario))
                 {
-                    _context.Update(usuario);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!UsuarioExists(usuario.IdUsuario))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["IdRol"] = new SelectList(_context.Rols, "IdRol", "IdRol", usuario.IdRol);
             ViewData["Idcontratacion"] = new SelectList(_context.Contratacions, "IdContratacion", "IdContratacion", usuario.Idcontratacion);
             ViewData["Usuario"] = "Gerente";
-            return View(usuario);
+            return RedirectToAction(nameof(Index));
         }
 
         // GET: Usuarios/Delete/5
